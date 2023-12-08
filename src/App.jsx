@@ -11,6 +11,14 @@ import CoustumHookes from './componets/CoustumHookes'
 function App() {
   const [data, setData] = useState([]);
   const {count , increment ,decrement}=CoustumHookes()
+
+  const [hasError,setHaserror]=useState(false);
+  const componetsDidCatch=(error,errorinfo)=>{
+    console.log('error bondery' ,error,errorinfo);
+    setHaserror(true)
+  }
+
+
   const ref=useRef(0);
 const refhandler=()=>{
   ref.current=ref.current+1;
@@ -44,6 +52,7 @@ useEffect(() => {
     console.log('hello am unmounting');
     callbackreturn();
   };
+
 }, []);
 
 useEffect(() => {
@@ -62,8 +71,8 @@ useEffect(() => {
   
 
   return (
-
       <>
+     {hasError ? <div>Error occurred!</div> : <div>Your regular content goes here</div>}
     <div>
       <h1>{second}</h1>
       <h1 ref={refhandler}>{count}</h1>
@@ -76,8 +85,10 @@ useEffect(() => {
             <h1>{post?.title}</h1>
           </div>
         ))}
+        
       </div>
     </div>
+    
   </>
     
 
