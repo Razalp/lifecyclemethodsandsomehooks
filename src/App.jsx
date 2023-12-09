@@ -74,6 +74,7 @@ useEffect(() => {
       <>
      {hasError ? <div>Error occurred!</div> : <div>Your regular content goes here</div>}
     <div>
+     
       <h1>{second}</h1>
       <h1 ref={refhandler}>{count}</h1>
       <h1>{ref.current}</h1>
