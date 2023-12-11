@@ -6,94 +6,100 @@ import Costemshooksss from './componets/Costemshooksss'
 import LifecycleExample from './componets/LifecycleExample'
 import MyComponent from './componets/MyComponent '
 import CoustumHookes from './componets/CoustumHookes'
-
+import axios from 'axios';
 
 function App() {
+  // State to hold data fetched from an API
   const [data, setData] = useState([]);
-  const {count , increment ,decrement}=CoustumHookes()
 
-  const [hasError,setHaserror]=useState(false);
-  const componetsDidCatch=(error,errorinfo)=>{
-    console.log('error bondery' ,error,errorinfo);
-    setHaserror(true)
+  // Custom hook for managing a count state
+  const { count, increment, decrement } = CoustumHookes();
+
+  // State to handle errors during rendering
+  const [hasError, setHasError] = useState(false);
+
+  // Error boundary for catching errors in the component tree
+  const componentDidCatch = (error, errorInfo) => {
+    console.log('error boundary', error, errorInfo);
+    setHasError(true);
   }
 
-
-  const ref=useRef(0);
-const refhandler=()=>{
-  ref.current=ref.current+1;
-}
-const callbacked=()=>{
-  console.log('callbacked when unmounted')
-}
-
-const [second,setSecond]=useState(0);
-useEffect(()=>{
-  // setTimeout(()=>{
-  //   setSecond((second)=>second + 1)
-  // },1000)
-  return()=>{
-    callbacked()
-    
+  // Ref to keep track of the current value across renders
+  const ref = useRef(0);
+  const refHandler = () => {
+    ref.current = ref.current + 1;
   }
-},[refhandler])
 
-const callback=()=>{
-  console.log('hello am callback')
-}
-const callbackreturn=()=>{
-  console.log('hello am unmounting callback')
-}
+  // Callback function called when the component is unmounted
+  const callbackUnmounted = () => {
+    console.log('callback when unmounted');
+  }
 
-useEffect(() => {
-  console.log('hello am mounting');
-  callback();
-  return () => {
-    console.log('hello am unmounting');
-    callbackreturn();
-  };
+  // State and effect to demonstrate mounting and unmounting
+  const [second, setSecond] = useState(0);
 
-}, []);
+  useEffect(() => {
+    // setTimeout(()=>{
+    //   setSecond(second => second + 1);
+    // },1000)
+  }, [refHandler])
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-      const jsonData = await response.json();
-      setData(jsonData);
-    } catch (error) {
-      console.log(error);
+
+  useEffect(() => {
+    return () => {
+      callbackUnmounted();
     }
-  };
-  fetchData();
-}, []);
+  }, [refHandler]);
 
-  
+  // Effects to demonstrate mounting and unmounting with callbacks
+  const callback = () => {
+    console.log('hello, I am a callback');
+  }
+  const callbackUnmount = () => {
+    console.log('hello, I am an unmounting callback');
+  }
+
+  useEffect(() => {
+    console.log('hello, I am mounting');
+    callback();
+    return () => {
+      console.log('hello, I am unmounting');
+      callbackUnmount();
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios('https://jsonplaceholder..com/posts');
+        setData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-      <>
-     {hasError ? <div>Error occurred!</div> : <div>Your regular content goes here</div>}
-    <div>
-     
-      <h1>{second}</h1>
-      <h1 ref={refhandler}>{count}</h1>
-      <h1>{ref.current}</h1>
-      <button onClick={decrement}>-</button>
-      <button onClick={increment}>+</button>
+    <>
+      {hasError ? <div>Error occurred!</div> : <div>Your regular content goes here</div>}
       <div>
-        {data.map((post) => (
-          <div key={post.id}>
-            <h1>{post?.title}</h1>
-          </div>
-        ))}
-        
+        <h1>{second}</h1>
+        <h1 ref={refHandler}>{count}</h1>
+        <h1>{ref.current}</h1>
+        <button onClick={decrement}>-</button>
+        <button onClick={increment}>+</button>
+        <div>
+          {data.map((post) => (
+            <div key={post.id}>
+              <h1>{post?.title}</h1>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-    
-  </>
-    
-
-  )
+    </>
+  );
 }
 
-export default App
+export default App;

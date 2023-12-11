@@ -15,13 +15,13 @@ const useFormInput = (initialValue) => {
 };
 
 const Costemshooksss = () => {
-  // Using the custom hook for each form input
+
   const usernameInput = useFormInput('');
   const passwordInput = useFormInput('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic with usernameInput.value and passwordInput.value
+
     console.log('Submitted:', usernameInput.value, passwordInput.value);
   };
 
