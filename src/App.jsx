@@ -44,7 +44,7 @@ function App() {
     }
   }, [refHandler]);
 
-  // Effects to demonstrate mounting and unmounting with callbacks
+
   const callback = () => {
     console.log('hello, I am a callback');
   }
