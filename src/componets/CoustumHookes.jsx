@@ -11,8 +11,12 @@ const CoustumHookes = (initialValue = 0, step = 1) => {
   const decrement = () => {
     setCount(count - step);
   };
+  // useEffect(() => {
+  //   console.log(`Count changed: ${count}`);
+  // }, [count]);
 
   return {
+    
     count,
     increment,
     decrement,
